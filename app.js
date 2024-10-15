@@ -23,13 +23,11 @@ if (env === 'dev') {
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //// DOCS ROUTE ////
 
-
 //// API ROUTES ////
 const helloWorldRoute = require('./api/routes/hello-world');
 
 app.use('/api/hello-world', helloWorldRoute);
 //// API ROUTES ////
-
 
 //// FRONT-END ROUTES ////
 const homepageRoute = require('./api/routes/front/index');

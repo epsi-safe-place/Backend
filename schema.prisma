@@ -1,0 +1,235 @@
+datasource db {
+	provider = "postgresql" // or your desired database provider
+	url = env("DATABASE_URL")
+}
+
+generator client {
+	provider = "prisma-client-js"
+}
+
+model Users {
+  Id_Users String @id @default(uuid())
+  name String?
+  last_name String
+  first_name String
+  birth_date DateTime
+  mail String @unique
+  password String
+  isAdmin Boolean?
+  seed_totp String?
+
+  posts Post[]
+  comments Comments[]
+  messagesSent Message[] @relation("MessagesSent")
+  notifications Notifications[]
+  settings Settings[]
+  friends Friends[]
+  reports Reports[]
+  sends Send[]
+  belongings Belonging[]
+  conversations Conversation[] @relation("UserConversations", references: [Id_Users])
+  reportedReports Report[] @relation("ReportedRelation", references: [Id_Users])
+  reporterReports Report[] @relation("ReporterRelation", references: [Id_Users])
+  friendRelations FriendRelations[]
+  notify Notify[]
+  receive Receive[]
+  speak Speak[]
+}
+
+model Post {
+  Id_Post String @id @default(uuid())
+  Id_Users String
+  content String
+  visibility String
+  toxic_score Float
+  image_exists Boolean?
+  date_creation DateTime
+  verified Boolean?
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  comments Comments[]
+  api_results API_result[]
+
+  @@unique([Id_Post, Id_Users])
+}
+
+model Comments {
+  Id_Comments String @id @default(uuid())
+  Id_Post String
+  Id_Users String
+  Id_Comments_replied String
+  content String
+  date_upload DateTime
+  toxic_score Float
+  image_exists Boolean?
+  verified Boolean?
+  post Post @relation(fields: [Id_Post], references: [Id_Post])
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  repliedTo Comments? @relation("Replies", fields: [Id_Comments_replied], references: [Id_Comments])
+  replies Comments[] @relation("Replies")
+
+  @@unique([Id_Comments, Id_Post, Id_Users, Id_Comments_replied])
+}
+
+model Message {
+  Id_Message String @id @default(uuid())
+  Id_Users String
+  content String
+  date_upload DateTime
+  sentBy Users @relation("MessagesSent", fields: [Id_Users], references: [Id_Users])
+  send Send[]
+  receive Receive[]
+
+  @@unique([Id_Message, Id_Users])
+}
+
+model Notifications {
+  Id_Notifications String @id @default(uuid())
+  Id_Users String
+  type String
+  content String?
+  date_upload String
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  notify Notify[]
+
+  @@unique([Id_Notifications, Id_Users])
+}
+
+model Settings {
+  Id_Settings String @id @default(uuid())
+  Id_Users String
+  data_type String
+  content String
+  confidentiality Boolean
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+}
+
+model Conversation {
+  Id_Conversation String @id @default(uuid())
+  name String?
+  participants Users[] @relation("UserConversations")
+  receive Receive[]
+  speak Speak[]
+  appartenance Appartenance[]
+}
+
+model Appartenance {
+  Id_Appartenance String @id @default(uuid())
+  Id_Utilisateurs String
+  Id_Conversation String
+  conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
+  user Users @relation(fields: [Id_Utilisateurs], references: [Id_Users])
+  belonging Belonging[]
+  speak Speak[]
+
+  @@unique([Id_Appartenance, Id_Utilisateurs, Id_Conversation])
+}
+
+model API_result {
+  Id_api_result String @id @default(uuid())
+  Id_Categories String
+  flagged Boolean
+  Id_Message String
+  Id_Users String
+  Id_Post String
+  Id_Comments String?
+  post Post @relation(fields: [Id_Post, Id_Users], references: [Id_Post, Id_Users])
+  comments Comments? @relation(fields: [Id_Comments], references: [Id_Comments])
+  categories Categories @relation(fields: [Id_Categories], references: [Id_api_result])
+
+  @@unique([Id_Post, Id_Users])
+  @@unique([Id_Comments, Id_Post, Id_Users])
+}
+
+model Categories {
+  Id_Categories String @id @default(uuid())
+  name String?
+  score String?
+  api_result API_result @relation(fields: [Id_Categories], references: [Id_api_result])
+}
+
+model Friends {
+  Id_Friends String @id @default(uuid())
+  Id_Users String
+  name String
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  friendRelations FriendRelations[]
+
+  @@unique([Id_Friends, Id_Users])
+}
+
+model Report {
+  Id_Report String
+  Id_Reporter String
+  Id_Reported String
+  type String
+  reason String?
+  reporter Users @relation("ReporterRelation", fields: [Id_Reporter], references: [Id_Users])
+  reported Users @relation("ReportedRelation", fields: [Id_Reported], references: [Id_Users])
+  reports Reports[]
+
+  @@id([Id_Report, Id_Reporter, Id_Reported])
+}
+
+model Send {
+  Id_Users String
+  Id_Message String
+  Id_Users_1 String
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  message Message @relation(fields: [Id_Message, Id_Users_1], references: [Id_Message, Id_Users])
+
+  @@id([Id_Users, Id_Message, Id_Users_1])
+}
+
+model Notify {
+  Id_Users String
+  Id_Notifications String
+  Id_Users_1 String
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  notification Notifications @relation(fields: [Id_Notifications, Id_Users_1], references: [Id_Notifications, Id_Users])
+
+  @@id([Id_Users, Id_Notifications, Id_Users_1])
+}
+
+model Belonging {
+  Id_Users String
+  Id_Appartenance String
+  Id_Utilisateurs String
+  Id_Conversation String
+  appartenance Appartenance @relation(fields: [Id_Appartenance, Id_Utilisateurs, Id_Conversation], references: [Id_Appartenance, Id_Utilisateurs, Id_Conversation])
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+}
+
+model Receive {
+  Id_Message String
+  Id_Users String
+  Id_Conversation String
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  message Message @relation(fields: [Id_Message], references: [Id_Message])
+  conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
+}
+
+model Speak {
+  Id_Conversation String
+  Id_Users String
+  Id_Appartenance String
+  Id_Utilisateurs String
+  conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
+  appartenance Appartenance @relation(fields: [Id_Appartenance, Id_Utilisateurs], references: [Id_Appartenance, Id_Utilisateurs])
+}
+
+model FriendRelations {
+  Id_Users String
+  Id_Friends String
+  Id_Users_1 String
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  friend Friends @relation(fields: [Id_Friends, Id_Users_1], references: [Id_Friends, Id_Users])
+}
+
+model Reports {
+  Id_Users String
+  Id_Report String
+  Id_Reporter String
+  Id_Reported String
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  report Report @relation(fields: [Id_Report, Id_Reporter, Id_Reported], references: [Id_Report, Id_Reporter, Id_Reported])
+}
