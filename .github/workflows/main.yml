@@ -33,3 +33,13 @@ jobs:
         file: ./Dockerfile
         push: true
         tags: ghcr.io/${{ github.repository }}/safe-place-backend:latest
+
+  redeploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Trigger Portainer Stack Redeploy
+      run: |
+        curl -X POST "$PORTAINER_WEBHOOK_URL"
+      env:
+        PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
