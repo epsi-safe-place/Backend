@@ -1,0 +1,29 @@
+{
+  "name": "safe-place-backend",
+  "version": "1.0.0",
+  "description": "Backend for the safe place social network",
+  "main": "app.js",
+  "scripts": {
+    "dev": "node app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/epsi-safe-place/Backend.git"
+  },
+  "author": "epsi-safe-place-team",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/epsi-safe-place/Backend/issues"
+  },
+  "homepage": "https://github.com/epsi-safe-place/Backend#readme",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6",
+    "express": "^4.21.1",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "prisma": "^5.20.0",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
