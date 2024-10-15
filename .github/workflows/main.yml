@@ -36,6 +36,7 @@ jobs:
 
   redeploy:
     runs-on: ubuntu-latest
+    needs: build
 
     steps:
     - name: Trigger Portainer Stack Redeploy
