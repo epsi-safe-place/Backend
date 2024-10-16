@@ -16,7 +16,7 @@ if (env === 'dev') {
     swaggerDocument.host = `localhost:${port}`;
     swaggerDocument.schemes = ['http'];
 } else if (env === 'prod') {
-    swaggerDocument.host = 'safe-place.flusin.fr';
+    swaggerDocument.host = 'safe-place-api.flusin.fr';
     swaggerDocument.schemes = ['https'];
 }
 
