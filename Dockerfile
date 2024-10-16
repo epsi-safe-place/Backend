@@ -15,7 +15,6 @@ COPY . .
 
 # Init prisma
 RUN npx prisma generate
-RUN npx prisma migrate dev
 
 # Tell Docker about the port we'll run on.
 EXPOSE 3000
