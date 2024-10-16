@@ -33,6 +33,6 @@ app.use('/api/users', userRoutes);
 
 // APP LISTEN //
 app.listen(port, () => {
-    const baseUrl = env === 'prod' ? 'https://safe-place.flusin.fr' : `http://localhost:${port}`;
+    const baseUrl = env === 'prod' ? 'https://safe-place-api.flusin.fr' : `http://localhost:${port}`;
     console.log(`Safe place API is listening at ${baseUrl}/api`);
 });
