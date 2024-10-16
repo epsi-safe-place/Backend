@@ -1,4 +1,5 @@
 const prisma = require('../models');
+const { Prisma } = require('@prisma/client');
 
 // Get all users
 exports.getAllUsers = async (req, res) => {
@@ -14,7 +15,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const user = await prisma.users.findUnique({
-      where: { Id_Users: req.params.id },
+      where: { Id_User: req.params.id },
     });
     if (!user) return res.status(404).json({ message: 'User not found' });
     res.status(200).json(user);
@@ -30,7 +31,7 @@ exports.createUser = async (req, res) => {
 
     // Check if user with the same email already exists
     const existingUser = await prisma.users.findUnique({
-      where: { mail },
+      where: { mail }, // This will now work since `mail` is unique
     });
     
     if (existingUser) {
@@ -60,7 +61,7 @@ exports.updateUser = async (req, res) => {
 
     // Check if the user exists
     const user = await prisma.users.findUnique({
-      where: { Id_Users: req.params.id },
+      where: { Id_User: req.params.id },
     });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
@@ -68,12 +69,12 @@ exports.updateUser = async (req, res) => {
     const existingUser = await prisma.users.findUnique({
       where: { mail },
     });
-    if (existingUser && existingUser.Id_Users !== req.params.id) {
+    if (existingUser && existingUser.Id_User !== req.params.id) {
       return res.status(409).json({ error: 'Another user with this email already exists' });
     }
 
     const updatedUser = await prisma.users.update({
-      where: { Id_Users: req.params.id },
+      where: { Id_User: req.params.id },
       data: req.body,
     });
     res.status(200).json(updatedUser); // OK
@@ -93,12 +94,12 @@ exports.deleteUser = async (req, res) => {
   try {
     // Check if the user exists before attempting to delete
     const user = await prisma.users.findUnique({
-      where: { Id_Users: req.params.id },
+      where: { Id_User: req.params.id },
     });
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     await prisma.users.delete({
-      where: { Id_Users: req.params.id },
+      where: { Id_User: req.params.id },
     });
     res.status(204).send(); // No Content
   } catch (error) {

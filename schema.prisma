@@ -1,6 +1,6 @@
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -8,229 +8,165 @@ generator client {
 }
 
 model Users {
-  Id_User String @id @default(uuid())
-  name String?
-  last_name String
-  first_name String
-  birth_date DateTime
-  mail String @unique
-  password String
-  isAdmin Boolean?
-  seed_totp String?
+  Id_User         String       @id @default(uuid())
+  name            String?      @db.VarChar(50)
+  last_name       String       @db.VarChar(20)
+  first_name      String       @db.VarChar(20)
+  birth_date      DateTime
+  mail            String       @unique @db.VarChar(25) // Ensure mail is unique
+  password        String       @db.VarChar(50)
+  isAdmin         Boolean?
+  seed_totp       String?
+  posts           Post[]
+  comments        Comments[]
+  messages        Message[]
+  notifications   Notifications[]
+  settings        Settings[]
+  userFriends     Friend[]     @relation("UserFriends")
+  friendOf        Friend[]     @relation("FriendOf")
+  reports         Reports[]
+  conversations   Discuss[]
 
-  posts Post[]
-  comments Comments[]
-  messagesSent Message[] @relation("MessagesSent")
-  notifications Notifications[]
-  settings Settings[]
-  friends Friends[]
-  reports Reports[]
-  sends Send[]
-  appartenances Appartenance[] // Removed Belonging reference
-  conversations Conversation[] @relation("UserConversations")
-  reportedReports Report[] @relation("ReportedRelation")
-  reporterReports Report[] @relation("ReporterRelation")
-  friendRelations FriendRelations[]
-  notify Notify[]
-  receive Receive[]
-  speak Speak[]
+  @@map("Users")
 }
 
-model Post {
-  Id_Post String @id @default(uuid())
-  Id_User String
-  content String
-  visibility String
-  toxic_score Float
-  image_exists Boolean?
-  date_creation DateTime
-  verified Boolean?
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  comments Comments[]
-  api_results API_result[]
 
-  @@unique([Id_Post, Id_User])
+model Post {
+  Id_Post       String      @id @default(uuid())
+  content       String
+  visibility    String      @db.VarChar(50)
+  toxic_score   Decimal     @db.Decimal(2, 1)
+  image_exists  Boolean?
+  date_creation DateTime
+  verified      Boolean?
+  Id_User       String
+  user          Users       @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
+  comments      Comments[]
+  api_results   API_result?
+
+  @@map("Post")
 }
 
 model Comments {
-  Id_Comment String @id @default(uuid())
-  Id_Post String
-  Id_User String
-  Id_Comment_replied String
-  content String
-  date_upload DateTime
-  toxic_score Float
-  image_exists Boolean?
-  verified Boolean?
-  post Post @relation(fields: [Id_Post], references: [Id_Post])
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  repliedTo Comments? @relation("Replies", fields: [Id_Comment_replied], references: [Id_Comment])
-  replies Comments[] @relation("Replies")
-  api_results API_result[]
+  Id_Comment          String      @id @default(uuid())
+  content             String
+  date_upload         DateTime
+  toxic_score         Decimal     @db.Decimal(2, 1)
+  image_exists        Boolean?
+  verified            Boolean?
+  Id_Comments_replied Int
+  Id_Post             String
+  Id_User             String
+  post                Post        @relation(fields: [Id_Post], references: [Id_Post], onDelete: Cascade)
+  user                Users       @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
+  api_results         API_result?
 
-  @@unique([Id_Comment, Id_Post, Id_User, Id_Comment_replied])
+  @@map("Comments")
 }
 
 model Message {
-  Id_Message String @id @default(uuid())
-  Id_User String
-  content String
+  Id_Message  String       @id @default(uuid())
+  content     String
   date_upload DateTime
-  sentBy Users @relation("MessagesSent", fields: [Id_User], references: [Id_User])
-  send Send[]
-  receive Receive[]
+  Id_User     String
+  user        Users        @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
+  API_result  API_result[]
 
-  @@unique([Id_Message, Id_User])
+  @@map("Message")
 }
 
 model Notifications {
-  Id_Notification String @id @default(uuid())
-  Id_User String
-  type String
-  content String?
-  date_upload String
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  notify Notify[]
+  Id_Notifications String  @id @default(uuid())
+  type             String  @db.VarChar(50)
+  content          String?
+  date_upload      String?
+  Id_User          String
+  user             Users   @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
 
-  @@unique([Id_Notification, Id_User])
+  @@map("Notifications")
 }
 
 model Settings {
-  Id_Setting String @id @default(uuid())
-  Id_User String
-  data_type String
-  content String
+  Id_Settings     String  @id @default(uuid())
+  data_type       String  @db.VarChar(50)
+  content         String
   confidentiality Boolean
-  user Users @relation(fields: [Id_User], references: [Id_User])
+  Id_User         String
+  user            Users   @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
+
+  @@map("Settings")
 }
 
 model Conversation {
-  Id_Conversation String @id @default(uuid())
-  name String?
-  participants Users[] @relation("UserConversations")
-  receive Receive[]
-  speak Speak[]
-  appartenance Appartenance[]
-}
+  Id_Conversation String    @id @default(uuid())
+  name            String?
+  Discuss         Discuss[]
 
-model Appartenance {
-  Id_Appartenance String @id @default(uuid())
-  Id_Utilisateur String
-  Id_Conversation String
-  conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
-  user Users @relation(fields: [Id_Utilisateur], references: [Id_User])
-  speak Speak[]
-
-  @@unique([Id_Appartenance, Id_Utilisateur]) // Add this compound unique constraint
+  @@map("Conversation")
 }
 
 model API_result {
-  Id_api_result String @id @default(uuid())
-  Id_Categorie String @unique
-  flagged Boolean
-  Id_Message String
-  Id_User String
-  Id_Post String
-  Id_Comment String?
-  post Post @relation(fields: [Id_Post, Id_User], references: [Id_Post, Id_User])
-  comments Comments? @relation(fields: [Id_Comment], references: [Id_Comment])
-  categories Categories @relation(fields: [Id_Categorie], references: [Id_Categorie]) // Provide both fields and references here
+  Id_api_result String       @id @default(uuid())
+  Id_Categories Int
+  flagged       Boolean?
+  Id_Message    String
+  Id_Post       String       @unique
+  Id_Comment    String       @unique
+  message       Message      @relation(fields: [Id_Message], references: [Id_Message], onDelete: Cascade)
+  post          Post         @relation(fields: [Id_Post], references: [Id_Post], onDelete: Cascade)
+  comment       Comments     @relation(fields: [Id_Comment], references: [Id_Comment], onDelete: Cascade)
+  Categories    Categories[]
 
-  @@unique([Id_Post, Id_User])
-  @@unique([Id_Comment, Id_Post, Id_User])
+  @@map("API_result")
 }
 
 model Categories {
-  Id_Categorie String @id @default(uuid())
-  name String?
-  score String?
-  api_result API_result? // Remove the `references` argument from here
+  Id_Category   String     @id @default(uuid())
+  name          String     @db.VarChar(50)
+  score         String?
+  Id_api_result String
+  api_result    API_result @relation(fields: [Id_api_result], references: [Id_api_result])
+
+  @@map("Categories")
 }
 
+model Friend {
+  Id_User   String
+  Id_Friend String
+  user      Users  @relation("UserFriends", fields: [Id_User], references: [Id_User], onDelete: Cascade)
+  friend    Users  @relation("FriendOf", fields: [Id_Friend], references: [Id_User], onDelete: Cascade)
 
-model Friends {
-  Id_Friend String @id @default(uuid())
-  Id_User String
-  name String
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  friendRelations FriendRelations[]
-
-  @@unique([Id_Friend, Id_User])
+  @@id([Id_User, Id_Friend])
+  @@map("Friend")
 }
 
 model Report {
-  Id_Report String
+  Id_Report   String    @id @default(uuid())
   Id_Reporter String
   Id_Reported String
-  type String
-  reason String?
-  reporter Users @relation("ReporterRelation", fields: [Id_Reporter], references: [Id_User])
-  reported Users @relation("ReportedRelation", fields: [Id_Reported], references: [Id_User])
-  reports Reports[]
+  type        String?
+  reason      String?
+  Reports     Reports[]
 
-  @@id([Id_Report, Id_Reporter, Id_Reported])
-}
-
-model Send {
-  Id_User String
-  Id_Message String
-  Id_User_1 String
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  message Message @relation(fields: [Id_Message, Id_User_1], references: [Id_Message, Id_User])
-
-  @@id([Id_User, Id_Message, Id_User_1])
-}
-
-model Notify {
-  Id_User String
-  Id_Notification String
-  Id_User_1 String
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  notification Notifications @relation(fields: [Id_Notification, Id_User_1], references: [Id_Notification, Id_User])
-
-  @@id([Id_User, Id_Notification, Id_User_1])
-}
-
-model Receive {
-  Id_Message String
-  Id_User String
-  Id_Conversation String
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  message Message @relation(fields: [Id_Message], references: [Id_Message])
-  conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
-
-  @@id([Id_Message, Id_User, Id_Conversation])
-}
-
-model Speak {
-  Id_Conversation String
-  Id_User String
-  Id_Appartenance String
-  Id_Utilisateur String
-  conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
-  appartenance Appartenance @relation(fields: [Id_Appartenance, Id_Utilisateur], references: [Id_Appartenance, Id_Utilisateur])
-  user Users @relation(fields: [Id_User], references: [Id_User])
-
-  @@id([Id_Conversation, Id_User, Id_Appartenance, Id_Utilisateur])
-}
-
-model FriendRelations {
-  Id_User String
-  Id_Friend String
-  Id_User_1 String
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  friend Friends @relation(fields: [Id_Friend, Id_User_1], references: [Id_Friend, Id_User])
-
-  @@id([Id_User, Id_Friend, Id_User_1])
+  @@map("Report")
 }
 
 model Reports {
-  Id_User String
+  Id_User   String
   Id_Report String
-  Id_Reporter String
-  Id_Reported String
-  user Users @relation(fields: [Id_User], references: [Id_User])
-  report Report @relation(fields: [Id_Report, Id_Reporter, Id_Reported], references: [Id_Report, Id_Reporter, Id_Reported])
+  user      Users  @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
+  report    Report @relation(fields: [Id_Report], references: [Id_Report], onDelete: Cascade)
 
-  @@id([Id_User, Id_Report, Id_Reporter, Id_Reported])
+  @@id([Id_User, Id_Report])
+  @@map("Reports")
+}
+
+model Discuss {
+  Id_User         String
+  Id_Conversation String
+  user            Users        @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
+  conversation    Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation], onDelete: Cascade)
+
+  @@id([Id_User, Id_Conversation])
+  @@map("Discuss")
 }

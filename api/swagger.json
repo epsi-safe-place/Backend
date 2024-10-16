@@ -100,7 +100,7 @@
             "description": "Updated user object",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/User"
+              "$ref": "#/definitions/NewUser"
             }
           }
         ],
@@ -134,6 +134,128 @@
           },
           "404": {
             "description": "User not found"
+          }
+        }
+      }
+    },
+    "/posts": {
+      "get": {
+        "summary": "Get all posts",
+        "operationId": "getAllPosts",
+        "tags": ["Posts"],
+        "responses": {
+          "200": {
+            "description": "A list of posts",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Post"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new post",
+        "operationId": "createPost",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "post",
+            "description": "Post object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewPost"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Post created successfully",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          }
+        }
+      }
+    },
+    "/posts/{id}": {
+      "get": {
+        "summary": "Get post by ID",
+        "operationId": "getPostById",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post details",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update post by ID",
+        "operationId": "updatePost",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "post",
+            "description": "Updated post object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewPost"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Post"
+            }
+          },
+          "404": {
+            "description": "Post not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete post by ID",
+        "operationId": "deletePost",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Post deleted successfully"
+          },
+          "404": {
+            "description": "Post not found"
           }
         }
       }
@@ -204,6 +326,67 @@
         }
       },
       "required": ["last_name", "first_name", "birth_date", "mail", "password"]
+    },
+    "Post": {
+      "type": "object",
+      "properties": {
+        "Id_Post": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string"
+        },
+        "toxic_score": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "image_exists": {
+          "type": "boolean"
+        },
+        "date_creation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["content", "visibility", "toxic_score", "date_creation", "Id_User"]
+    },
+    "NewPost": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string"
+        },
+        "toxic_score": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "image_exists": {
+          "type": "boolean"
+        },
+        "date_creation": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["content", "visibility", "toxic_score", "date_creation", "Id_User"]
     }
   }
 }
