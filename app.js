@@ -26,8 +26,10 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //// API ROUTES ////
 const userRoutes = require('./api/routes/users.routes')
+const postRoutes = require('./api/routes/posts.routes')
 
 app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 //// API ROUTES ////
 
 
