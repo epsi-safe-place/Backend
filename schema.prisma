@@ -1,10 +1,10 @@
 datasource db {
-	provider = "postgresql" // or your desired database provider
-	url = env("DATABASE_URL")
+  provider = "postgresql"
+  url = env("DATABASE_URL")
 }
 
 generator client {
-	provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model Users {
@@ -26,10 +26,10 @@ model Users {
   friends Friends[]
   reports Reports[]
   sends Send[]
-  belongings Belonging[]
-  conversations Conversation[] @relation("UserConversations", references: [Id_Users])
-  reportedReports Report[] @relation("ReportedRelation", references: [Id_Users])
-  reporterReports Report[] @relation("ReporterRelation", references: [Id_Users])
+  appartenances Appartenance[] // Removed Belonging reference
+  conversations Conversation[] @relation("UserConversations")
+  reportedReports Report[] @relation("ReportedRelation")
+  reporterReports Report[] @relation("ReporterRelation")
   friendRelations FriendRelations[]
   notify Notify[]
   receive Receive[]
@@ -66,6 +66,7 @@ model Comments {
   user Users @relation(fields: [Id_Users], references: [Id_Users])
   repliedTo Comments? @relation("Replies", fields: [Id_Comments_replied], references: [Id_Comments])
   replies Comments[] @relation("Replies")
+  api_results API_result[]
 
   @@unique([Id_Comments, Id_Post, Id_Users, Id_Comments_replied])
 }
@@ -118,15 +119,14 @@ model Appartenance {
   Id_Conversation String
   conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
   user Users @relation(fields: [Id_Utilisateurs], references: [Id_Users])
-  belonging Belonging[]
   speak Speak[]
 
-  @@unique([Id_Appartenance, Id_Utilisateurs, Id_Conversation])
+  @@unique([Id_Appartenance, Id_Utilisateurs]) // Add this compound unique constraint
 }
 
 model API_result {
   Id_api_result String @id @default(uuid())
-  Id_Categories String
+  Id_Categories String @unique
   flagged Boolean
   Id_Message String
   Id_Users String
@@ -134,7 +134,7 @@ model API_result {
   Id_Comments String?
   post Post @relation(fields: [Id_Post, Id_Users], references: [Id_Post, Id_Users])
   comments Comments? @relation(fields: [Id_Comments], references: [Id_Comments])
-  categories Categories @relation(fields: [Id_Categories], references: [Id_api_result])
+  categories Categories @relation(fields: [Id_Categories], references: [Id_Categories]) // Provide both fields and references here
 
   @@unique([Id_Post, Id_Users])
   @@unique([Id_Comments, Id_Post, Id_Users])
@@ -144,8 +144,9 @@ model Categories {
   Id_Categories String @id @default(uuid())
   name String?
   score String?
-  api_result API_result @relation(fields: [Id_Categories], references: [Id_api_result])
+  api_result API_result? // Remove the `references` argument from here
 }
+
 
 model Friends {
   Id_Friends String @id @default(uuid())
@@ -190,15 +191,6 @@ model Notify {
   @@id([Id_Users, Id_Notifications, Id_Users_1])
 }
 
-model Belonging {
-  Id_Users String
-  Id_Appartenance String
-  Id_Utilisateurs String
-  Id_Conversation String
-  appartenance Appartenance @relation(fields: [Id_Appartenance, Id_Utilisateurs, Id_Conversation], references: [Id_Appartenance, Id_Utilisateurs, Id_Conversation])
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
-}
-
 model Receive {
   Id_Message String
   Id_Users String
@@ -206,6 +198,8 @@ model Receive {
   user Users @relation(fields: [Id_Users], references: [Id_Users])
   message Message @relation(fields: [Id_Message], references: [Id_Message])
   conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
+
+  @@id([Id_Message, Id_Users, Id_Conversation])
 }
 
 model Speak {
@@ -215,6 +209,9 @@ model Speak {
   Id_Utilisateurs String
   conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
   appartenance Appartenance @relation(fields: [Id_Appartenance, Id_Utilisateurs], references: [Id_Appartenance, Id_Utilisateurs])
+  user Users @relation(fields: [Id_Users], references: [Id_Users])
+
+  @@id([Id_Conversation, Id_Users, Id_Appartenance, Id_Utilisateurs])
 }
 
 model FriendRelations {
@@ -223,6 +220,8 @@ model FriendRelations {
   Id_Users_1 String
   user Users @relation(fields: [Id_Users], references: [Id_Users])
   friend Friends @relation(fields: [Id_Friends, Id_Users_1], references: [Id_Friends, Id_Users])
+
+  @@id([Id_Users, Id_Friends, Id_Users_1])
 }
 
 model Reports {
@@ -232,4 +231,6 @@ model Reports {
   Id_Reported String
   user Users @relation(fields: [Id_Users], references: [Id_Users])
   report Report @relation(fields: [Id_Report, Id_Reporter, Id_Reported], references: [Id_Report, Id_Reporter, Id_Reported])
+
+  @@id([Id_Users, Id_Report, Id_Reporter, Id_Reported])
 }
