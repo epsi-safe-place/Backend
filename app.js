@@ -4,6 +4,7 @@ const path = require('path');
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
 const app = express();
+app.use(express.json())
 const port = parseInt(process.env.API_PORT) || 3000;
 
 // Determine environment
@@ -24,16 +25,10 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 //// DOCS ROUTE ////
 
 //// API ROUTES ////
-const helloWorldRoute = require('./api/routes/hello-world');
+const userRoutes = require('./api/routes/users.routes')
 
-app.use('/api/hello-world', helloWorldRoute);
+app.use('/api/users', userRoutes);
 //// API ROUTES ////
-
-//// FRONT-END ROUTES ////
-const homepageRoute = require('./api/routes/front/index');
-
-app.use('/', homepageRoute);
-//// FRONT-END ROUTES ////
 
 
 // APP LISTEN //

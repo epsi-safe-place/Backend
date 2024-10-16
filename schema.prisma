@@ -8,7 +8,7 @@ generator client {
 }
 
 model Users {
-  Id_Users String @id @default(uuid())
+  Id_User String @id @default(uuid())
   name String?
   last_name String
   first_name String
@@ -38,70 +38,70 @@ model Users {
 
 model Post {
   Id_Post String @id @default(uuid())
-  Id_Users String
+  Id_User String
   content String
   visibility String
   toxic_score Float
   image_exists Boolean?
   date_creation DateTime
   verified Boolean?
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  user Users @relation(fields: [Id_User], references: [Id_User])
   comments Comments[]
   api_results API_result[]
 
-  @@unique([Id_Post, Id_Users])
+  @@unique([Id_Post, Id_User])
 }
 
 model Comments {
-  Id_Comments String @id @default(uuid())
+  Id_Comment String @id @default(uuid())
   Id_Post String
-  Id_Users String
-  Id_Comments_replied String
+  Id_User String
+  Id_Comment_replied String
   content String
   date_upload DateTime
   toxic_score Float
   image_exists Boolean?
   verified Boolean?
   post Post @relation(fields: [Id_Post], references: [Id_Post])
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
-  repliedTo Comments? @relation("Replies", fields: [Id_Comments_replied], references: [Id_Comments])
+  user Users @relation(fields: [Id_User], references: [Id_User])
+  repliedTo Comments? @relation("Replies", fields: [Id_Comment_replied], references: [Id_Comment])
   replies Comments[] @relation("Replies")
   api_results API_result[]
 
-  @@unique([Id_Comments, Id_Post, Id_Users, Id_Comments_replied])
+  @@unique([Id_Comment, Id_Post, Id_User, Id_Comment_replied])
 }
 
 model Message {
   Id_Message String @id @default(uuid())
-  Id_Users String
+  Id_User String
   content String
   date_upload DateTime
-  sentBy Users @relation("MessagesSent", fields: [Id_Users], references: [Id_Users])
+  sentBy Users @relation("MessagesSent", fields: [Id_User], references: [Id_User])
   send Send[]
   receive Receive[]
 
-  @@unique([Id_Message, Id_Users])
+  @@unique([Id_Message, Id_User])
 }
 
 model Notifications {
-  Id_Notifications String @id @default(uuid())
-  Id_Users String
+  Id_Notification String @id @default(uuid())
+  Id_User String
   type String
   content String?
   date_upload String
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  user Users @relation(fields: [Id_User], references: [Id_User])
   notify Notify[]
 
-  @@unique([Id_Notifications, Id_Users])
+  @@unique([Id_Notification, Id_User])
 }
 
 model Settings {
-  Id_Settings String @id @default(uuid())
-  Id_Users String
+  Id_Setting String @id @default(uuid())
+  Id_User String
   data_type String
   content String
   confidentiality Boolean
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  user Users @relation(fields: [Id_User], references: [Id_User])
 }
 
 model Conversation {
@@ -115,33 +115,33 @@ model Conversation {
 
 model Appartenance {
   Id_Appartenance String @id @default(uuid())
-  Id_Utilisateurs String
+  Id_Utilisateur String
   Id_Conversation String
   conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
-  user Users @relation(fields: [Id_Utilisateurs], references: [Id_Users])
+  user Users @relation(fields: [Id_Utilisateur], references: [Id_User])
   speak Speak[]
 
-  @@unique([Id_Appartenance, Id_Utilisateurs]) // Add this compound unique constraint
+  @@unique([Id_Appartenance, Id_Utilisateur]) // Add this compound unique constraint
 }
 
 model API_result {
   Id_api_result String @id @default(uuid())
-  Id_Categories String @unique
+  Id_Categorie String @unique
   flagged Boolean
   Id_Message String
-  Id_Users String
+  Id_User String
   Id_Post String
-  Id_Comments String?
-  post Post @relation(fields: [Id_Post, Id_Users], references: [Id_Post, Id_Users])
-  comments Comments? @relation(fields: [Id_Comments], references: [Id_Comments])
-  categories Categories @relation(fields: [Id_Categories], references: [Id_Categories]) // Provide both fields and references here
+  Id_Comment String?
+  post Post @relation(fields: [Id_Post, Id_User], references: [Id_Post, Id_User])
+  comments Comments? @relation(fields: [Id_Comment], references: [Id_Comment])
+  categories Categories @relation(fields: [Id_Categorie], references: [Id_Categorie]) // Provide both fields and references here
 
-  @@unique([Id_Post, Id_Users])
-  @@unique([Id_Comments, Id_Post, Id_Users])
+  @@unique([Id_Post, Id_User])
+  @@unique([Id_Comment, Id_Post, Id_User])
 }
 
 model Categories {
-  Id_Categories String @id @default(uuid())
+  Id_Categorie String @id @default(uuid())
   name String?
   score String?
   api_result API_result? // Remove the `references` argument from here
@@ -149,13 +149,13 @@ model Categories {
 
 
 model Friends {
-  Id_Friends String @id @default(uuid())
-  Id_Users String
+  Id_Friend String @id @default(uuid())
+  Id_User String
   name String
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  user Users @relation(fields: [Id_User], references: [Id_User])
   friendRelations FriendRelations[]
 
-  @@unique([Id_Friends, Id_Users])
+  @@unique([Id_Friend, Id_User])
 }
 
 model Report {
@@ -164,73 +164,73 @@ model Report {
   Id_Reported String
   type String
   reason String?
-  reporter Users @relation("ReporterRelation", fields: [Id_Reporter], references: [Id_Users])
-  reported Users @relation("ReportedRelation", fields: [Id_Reported], references: [Id_Users])
+  reporter Users @relation("ReporterRelation", fields: [Id_Reporter], references: [Id_User])
+  reported Users @relation("ReportedRelation", fields: [Id_Reported], references: [Id_User])
   reports Reports[]
 
   @@id([Id_Report, Id_Reporter, Id_Reported])
 }
 
 model Send {
-  Id_Users String
+  Id_User String
   Id_Message String
-  Id_Users_1 String
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
-  message Message @relation(fields: [Id_Message, Id_Users_1], references: [Id_Message, Id_Users])
+  Id_User_1 String
+  user Users @relation(fields: [Id_User], references: [Id_User])
+  message Message @relation(fields: [Id_Message, Id_User_1], references: [Id_Message, Id_User])
 
-  @@id([Id_Users, Id_Message, Id_Users_1])
+  @@id([Id_User, Id_Message, Id_User_1])
 }
 
 model Notify {
-  Id_Users String
-  Id_Notifications String
-  Id_Users_1 String
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
-  notification Notifications @relation(fields: [Id_Notifications, Id_Users_1], references: [Id_Notifications, Id_Users])
+  Id_User String
+  Id_Notification String
+  Id_User_1 String
+  user Users @relation(fields: [Id_User], references: [Id_User])
+  notification Notifications @relation(fields: [Id_Notification, Id_User_1], references: [Id_Notification, Id_User])
 
-  @@id([Id_Users, Id_Notifications, Id_Users_1])
+  @@id([Id_User, Id_Notification, Id_User_1])
 }
 
 model Receive {
   Id_Message String
-  Id_Users String
+  Id_User String
   Id_Conversation String
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  user Users @relation(fields: [Id_User], references: [Id_User])
   message Message @relation(fields: [Id_Message], references: [Id_Message])
   conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
 
-  @@id([Id_Message, Id_Users, Id_Conversation])
+  @@id([Id_Message, Id_User, Id_Conversation])
 }
 
 model Speak {
   Id_Conversation String
-  Id_Users String
+  Id_User String
   Id_Appartenance String
-  Id_Utilisateurs String
+  Id_Utilisateur String
   conversation Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation])
-  appartenance Appartenance @relation(fields: [Id_Appartenance, Id_Utilisateurs], references: [Id_Appartenance, Id_Utilisateurs])
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  appartenance Appartenance @relation(fields: [Id_Appartenance, Id_Utilisateur], references: [Id_Appartenance, Id_Utilisateur])
+  user Users @relation(fields: [Id_User], references: [Id_User])
 
-  @@id([Id_Conversation, Id_Users, Id_Appartenance, Id_Utilisateurs])
+  @@id([Id_Conversation, Id_User, Id_Appartenance, Id_Utilisateur])
 }
 
 model FriendRelations {
-  Id_Users String
-  Id_Friends String
-  Id_Users_1 String
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
-  friend Friends @relation(fields: [Id_Friends, Id_Users_1], references: [Id_Friends, Id_Users])
+  Id_User String
+  Id_Friend String
+  Id_User_1 String
+  user Users @relation(fields: [Id_User], references: [Id_User])
+  friend Friends @relation(fields: [Id_Friend, Id_User_1], references: [Id_Friend, Id_User])
 
-  @@id([Id_Users, Id_Friends, Id_Users_1])
+  @@id([Id_User, Id_Friend, Id_User_1])
 }
 
 model Reports {
-  Id_Users String
+  Id_User String
   Id_Report String
   Id_Reporter String
   Id_Reported String
-  user Users @relation(fields: [Id_Users], references: [Id_Users])
+  user Users @relation(fields: [Id_User], references: [Id_User])
   report Report @relation(fields: [Id_Report, Id_Reporter, Id_Reported], references: [Id_Report, Id_Reporter, Id_Reported])
 
-  @@id([Id_Users, Id_Report, Id_Reporter, Id_Reported])
+  @@id([Id_User, Id_Report, Id_Reporter, Id_Reported])
 }
