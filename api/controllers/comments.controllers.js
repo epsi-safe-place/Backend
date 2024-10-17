@@ -24,7 +24,13 @@ const getBase64Image = (commentId) => {
 // Get all comments
 exports.getAllComments = async (req, res) => {
   try {
-    const comments = await prisma.comments.findMany();
+    const comments = await prisma.comments.findMany({
+      include: {
+        user: true, // Include the user object associated with the comment
+        replies: true, // Include any comments that are replies to this comment
+      },
+    }
+    );
 
     const commentsWithImages = comments.map(comment => {
       if (comment.image_exists) {
@@ -46,9 +52,11 @@ exports.getCommentById = async (req, res) => {
     const comment = await prisma.comments.findUnique({
       where: { Id_Comment: req.params.id },
       include: {
-        replies: true // Include any comments that are replies to this comment
-      }
+        replies: true, // Include any comments that are replies to this comment
+        user: true,    // Include the user object associated with the comment
+      },
     });
+    
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
 
     // Add base64 image if it exists
@@ -56,6 +64,7 @@ exports.getCommentById = async (req, res) => {
       comment.image_b64 = getBase64Image(comment.Id_Comment);
     }
 
+    // Return the comment along with the user object
     res.status(200).json(comment);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch comment' });
@@ -114,6 +123,7 @@ exports.createComment = async (req, res) => {
     } else {
       res.status(500).json({ error: 'Failed to create comment' });
     }
+    console.error(error);
   }
 };
 
