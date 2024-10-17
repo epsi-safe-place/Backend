@@ -9,12 +9,12 @@ generator client {
 
 model Users {
   Id_User       String          @id @default(uuid())
-  name          String?         @db.VarChar(50)
-  last_name     String          @db.VarChar(20)
-  first_name    String          @db.VarChar(20)
+  name          String?         @db.VarChar(255)
+  last_name     String          @db.VarChar(255)
+  first_name    String          @db.VarChar(255)
   birth_date    DateTime
-  mail          String          @unique @db.VarChar(25) // Ensure mail is unique
-  password      String          @db.VarChar(50)
+  mail          String          @unique @db.VarChar(255) // Ensure mail is unique
+  password      String          @db.VarChar(255)
   isAdmin       Boolean?
   seed_totp     String?
   posts         Post[]
