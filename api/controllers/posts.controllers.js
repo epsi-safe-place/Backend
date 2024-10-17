@@ -24,7 +24,14 @@ const getBase64Image = (postId) => {
 // Get all posts
 exports.getAllPosts = async (req, res) => {
   try {
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany(
+      {
+        include: {
+          user: true, // Include the user object associated with the comment
+          comments: true, // Include any comments that are replies to this comment
+        },
+      }
+    );
 
     const postsWithImages = posts.map(post => {
       if (post.image_exists) {
@@ -51,7 +58,11 @@ exports.getFeedPosts = async (req, res) => {
         Id_User: {
           not: excludeUserId // Exclude posts by this user ID
         }
-      }
+      },
+      include: {
+        user: true, // Include the user object associated with the post
+        comments: true, // Include any comments that are replies to this post
+      },
     });
 
     const postsWithImages = posts.map(post => {
@@ -75,6 +86,10 @@ exports.getPostById = async (req, res) => {
   try {
     const post = await prisma.post.findUnique({
       where: { Id_Post: req.params.id },
+      include: {
+        user: true, // Include the user object associated with the post
+        comments: true, // Include any comments that are replies to this post
+      },
     });
     if (!post) return res.status(404).json({ message: 'Post not found' });
 
