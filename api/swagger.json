@@ -23,13 +23,16 @@
         "tags": ["Users"],
         "responses": {
           "200": {
-            "description": "A list of users",
+            "description": "A list of users (password omitted)",
             "schema": {
               "type": "array",
               "items": {
                 "$ref": "#/definitions/User"
               }
             }
+          },
+          "500": {
+            "description": "Failed to fetch users"
           }
         }
       },
@@ -41,7 +44,7 @@
           {
             "in": "body",
             "name": "user",
-            "description": "User object to create",
+            "description": "User object to create (password will be hashed)",
             "required": true,
             "schema": {
               "$ref": "#/definitions/NewUser"
@@ -54,6 +57,12 @@
             "schema": {
               "$ref": "#/definitions/User"
             }
+          },
+          "409": {
+            "description": "User with this email already exists"
+          },
+          "500": {
+            "description": "Failed to create user"
           }
         }
       }
@@ -73,13 +82,16 @@
         ],
         "responses": {
           "200": {
-            "description": "User details",
+            "description": "User details (password omitted)",
             "schema": {
               "$ref": "#/definitions/User"
             }
           },
           "404": {
             "description": "User not found"
+          },
+          "500": {
+            "description": "Failed to fetch user"
           }
         }
       },
@@ -97,7 +109,7 @@
           {
             "in": "body",
             "name": "user",
-            "description": "Updated user object",
+            "description": "Updated user object (password will be hashed if provided)",
             "required": true,
             "schema": {
               "$ref": "#/definitions/NewUser"
@@ -113,6 +125,12 @@
           },
           "404": {
             "description": "User not found"
+          },
+          "409": {
+            "description": "User with this email already exists"
+          },
+          "500": {
+            "description": "Failed to update user"
           }
         }
       },
@@ -134,6 +152,41 @@
           },
           "404": {
             "description": "User not found"
+          },
+          "500": {
+            "description": "Failed to delete user"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "tags": ["Users"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "login",
+            "description": "User login object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful, returns a JWT token",
+            "schema": {
+              "$ref": "#/definitions/LoginResponse"
+            }
+          },
+          "401": {
+            "description": "Invalid email or password"
+          },
+          "500": {
+            "description": "Failed to login user"
           }
         }
       }
@@ -1655,6 +1708,64 @@
           }
         }
       }
+    },
+    "/openai_api/moderate": {
+      "post": {
+        "summary": "Moderate content (text and images)",
+        "operationId": "moderateContent",
+        "tags": ["OpenAI"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "input",
+            "description": "Array of text and image moderation input",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ModerationInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Moderation results",
+            "schema": {
+              "$ref": "#/definitions/ModerationResponse"
+            }
+          },
+          "500": {
+            "description": "Failed to moderate content"
+          }
+        }
+      }
+    },
+    "/openai_api/rephrase": {
+      "post": {
+        "summary": "Rephrase content using GPT-4 Turbo",
+        "operationId": "rephraseContent",
+        "tags": ["OpenAI"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "input",
+            "description": "Object containing the analysis result and the original message",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RephraseInput"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rephrased content",
+            "schema": {
+              "$ref": "#/definitions/RephraseResponse"
+            }
+          },
+          "500": {
+            "description": "Failed to rephrase content"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1678,9 +1789,6 @@
           "format": "date-time"
         },
         "mail": {
-          "type": "string"
-        },
-        "password": {
           "type": "string"
         },
         "isAdmin": {
@@ -1722,6 +1830,29 @@
         }
       },
       "required": ["last_name", "first_name", "birth_date", "mail", "password"]
+    },
+    "LoginUser": {
+      "type": "object",
+      "properties": {
+        "mail": {
+          "type": "string",
+          "description": "User's email address"
+        },
+        "password": {
+          "type": "string",
+          "description": "User's password"
+        }
+      },
+      "required": ["mail", "password"]
+    },
+    "LoginResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "JWT token"
+        }
+      }
     },
     "Post": {
       "type": "object",
@@ -2255,6 +2386,113 @@
         },
         "Id_Conversation": {
           "type": "string"
+        }
+      }
+    },
+    "ModerationInput": {
+      "type": "object",
+      "properties": {
+        "input": {
+          "type": "array",
+          "description": "Array of content to be moderated (text and images)",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Type of input (either text or image_url)",
+                "example": "text"
+              },
+              "text": {
+                "type": "string",
+                "description": "The text content to be moderated (for type: text)",
+                "example": "Je ne t'aime pas"
+              },
+              "image_url": {
+                "type": "object",
+                "properties": {
+                  "url": {
+                    "type": "string",
+                    "description": "The image URL to be moderated (for type: image_url)",
+                    "example": "https://media.istockphoto.com/id/160330881/photo/somebody-shooting-a-man-with-gun.jpg?s=612x612&w=0&k=20&c=7YDJ5XUzjBWQg0VGHQxov_QBJxL4GEKyGiIcgl57iHI="
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "required": ["input"]
+    },
+    "ModerationResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique ID for the moderation result"
+        },
+        "model": {
+          "type": "string",
+          "description": "Model used for moderation"
+        },
+        "results": {
+          "type": "array",
+          "description": "Array of moderation results",
+          "items": {
+            "type": "object",
+            "properties": {
+              "flagged": {
+                "type": "boolean",
+                "description": "Indicates whether the content was flagged"
+              },
+              "categories": {
+                "type": "object",
+                "description": "Categories flagged (e.g., violence, hate)",
+                "additionalProperties": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "RephraseInput": {
+      "type": "object",
+      "properties": {
+        "analysisResult": {
+          "type": "object",
+          "description": "The result of the content analysis (toxicity categories)",
+          "properties": {
+            "results": {
+              "type": "object",
+              "properties": {
+                "categories": {
+                  "type": "object",
+                  "description": "Object containing detected toxic categories",
+                  "additionalProperties": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "originalMessage": {
+          "type": "string",
+          "description": "The original message to be rephrased",
+          "example": "Je ne t'aime pas"
+        }
+      },
+      "required": ["analysisResult", "originalMessage"]
+    },
+    "RephraseResponse": {
+      "type": "object",
+      "properties": {
+        "rephrasedContent": {
+          "type": "string",
+          "description": "The rephrased version of the original message",
+          "example": "Je n'apprécie pas ce comportement"
         }
       }
     }

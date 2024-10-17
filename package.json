@@ -19,11 +19,14 @@
   "homepage": "https://github.com/epsi-safe-place/Backend#readme",
   "dependencies": {
     "@prisma/client": "^5.20.0",
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "dotenv": "^16.4.5",
     "dotenv-expand": "^11.0.6",
     "express": "^4.21.1",
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
+    "node-fetch": "^3.3.2",
     "path": "^0.12.7",
     "prisma": "^5.20.0",
     "swagger-ui-express": "^5.0.1"

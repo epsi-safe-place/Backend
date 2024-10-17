@@ -38,7 +38,7 @@ const friendsRoutes = require('./api/routes/friends.routes')
 const reportsRoutes = require('./api/routes/reports.routes')
 const reportsAssociationsRoutes = require('./api/routes/reports_associations.routes')
 const discussRoutes = require('./api/routes/discuss.routes')
-// const openaiApiRoutes = require('./api/routes/openai_api.routes')
+const openaiApiRoutes = require('./api/routes/openai_api.routes')
 
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
@@ -53,7 +53,7 @@ app.use('/api/friends', friendsRoutes);
 app.use('/api/reports', reportsRoutes);
 app.use('/api/reports_associations', reportsAssociationsRoutes);
 app.use('/api/discuss', discussRoutes);
-// app.use('/api/openai_api', openaiApiRoutes);
+app.use('/api/openai_api', openaiApiRoutes);
 //// API ROUTES ////
 
 
