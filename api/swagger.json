@@ -1898,7 +1898,7 @@
         },
         "toxic_score": {
           "type": "number",
-          "format": "decimal"
+          "format": "integer"
         },
         "image_exists": {
           "type": "boolean"

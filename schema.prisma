@@ -34,7 +34,7 @@ model Post {
   Id_Post       String      @id @default(uuid())
   content       String
   visibility    String      @db.VarChar(50)
-  toxic_score   Decimal     @db.Decimal(2, 1)
+  toxic_score   Int         @db.Integer
   image_exists  Boolean?
   date_creation DateTime
   verified      Boolean?
@@ -50,7 +50,7 @@ model Comments {
   Id_Comment          String      @id @default(uuid())
   content             String
   date_upload         DateTime
-  toxic_score         Decimal     @db.Decimal(2, 1)
+  toxic_score         Int         @db.Integer
   image_exists        Boolean?
   verified            Boolean?
   Id_Reply_to_comment String? // Scalar field to store the comment ID
