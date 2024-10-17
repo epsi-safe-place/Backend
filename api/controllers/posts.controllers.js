@@ -41,6 +41,35 @@ exports.getAllPosts = async (req, res) => {
   }
 };
 
+// Get feed posts excluding those from a specific user ID
+exports.getFeedPosts = async (req, res) => {
+  try {
+    const { excludeUserId } = req.query;
+
+    const posts = await prisma.post.findMany({
+      where: {
+        Id_User: {
+          not: excludeUserId // Exclude posts by this user ID
+        }
+      }
+    });
+
+    const postsWithImages = posts.map(post => {
+      if (post.image_exists) {
+        const base64Image = getBase64Image(post.Id_Post);
+        return { ...post, image_b64: base64Image };
+      }
+      return post;
+    });
+
+    res.status(200).json(postsWithImages);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch feed posts' });
+    console.error(error);
+  }
+};
+
+
 // Get a post by ID
 exports.getPostById = async (req, res) => {
   try {

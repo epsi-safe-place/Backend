@@ -233,6 +233,36 @@
         }
       }
     },
+    "/posts/feed": {
+      "get": {
+        "summary": "Get feed posts excluding posts from a specific user",
+        "operationId": "getFeedPosts",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "excludeUserId",
+            "in": "query",
+            "description": "User ID whose posts should be excluded from the feed",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of posts excluding the specified user's posts",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Post"
+              }
+            }
+          },
+          "500": {
+            "description": "Failed to fetch feed posts"
+          }
+        }
+      }
+    },
     "/posts/{id}": {
       "get": {
         "summary": "Get post by ID",
