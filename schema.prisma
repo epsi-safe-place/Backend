@@ -8,28 +8,27 @@ generator client {
 }
 
 model Users {
-  Id_User         String       @id @default(uuid())
-  name            String?      @db.VarChar(50)
-  last_name       String       @db.VarChar(20)
-  first_name      String       @db.VarChar(20)
-  birth_date      DateTime
-  mail            String       @unique @db.VarChar(25) // Ensure mail is unique
-  password        String       @db.VarChar(50)
-  isAdmin         Boolean?
-  seed_totp       String?
-  posts           Post[]
-  comments        Comments[]
-  messages        Message[]
-  notifications   Notifications[]
-  settings        Settings[]
-  userFriends     Friend[]     @relation("UserFriends")
-  friendOf        Friend[]     @relation("FriendOf")
-  reports         Reports[]
-  conversations   Discuss[]
+  Id_User       String          @id @default(uuid())
+  name          String?         @db.VarChar(50)
+  last_name     String          @db.VarChar(20)
+  first_name    String          @db.VarChar(20)
+  birth_date    DateTime
+  mail          String          @unique @db.VarChar(25) // Ensure mail is unique
+  password      String          @db.VarChar(50)
+  isAdmin       Boolean?
+  seed_totp     String?
+  posts         Post[]
+  comments      Comments[]
+  messages      Message[]
+  notifications Notifications[]
+  settings      Settings[]
+  userFriends   Friend[]        @relation("UserFriends")
+  friendOf      Friend[]        @relation("FriendOf")
+  reports       Reports[]
+  conversations Discuss[]
 
   @@map("Users")
 }
-
 
 model Post {
   Id_Post       String      @id @default(uuid())
@@ -54,7 +53,9 @@ model Comments {
   toxic_score         Decimal     @db.Decimal(2, 1)
   image_exists        Boolean?
   verified            Boolean?
-  Id_Comments_replied Int
+  Id_Reply_to_comment String? // Scalar field to store the comment ID
+  reply_to_comment    Comments?   @relation("ReplyToComment", fields: [Id_Reply_to_comment], references: [Id_Comment])
+  replies             Comments[]  @relation("ReplyToComment") // For comments that reply to this comment
   Id_Post             String
   Id_User             String
   post                Post        @relation(fields: [Id_Post], references: [Id_Post], onDelete: Cascade)
@@ -65,12 +66,14 @@ model Comments {
 }
 
 model Message {
-  Id_Message  String       @id @default(uuid())
-  content     String
-  date_upload DateTime
-  Id_User     String
-  user        Users        @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
-  API_result  API_result[]
+  Id_Message      String       @id @default(uuid())
+  content         String
+  date_upload     DateTime
+  Id_User         String
+  Id_Conversation String
+  user            Users        @relation(fields: [Id_User], references: [Id_User], onDelete: Cascade)
+  conversation    Conversation @relation(fields: [Id_Conversation], references: [Id_Conversation], onDelete: Cascade)
+  API_result      API_result[]
 
   @@map("Message")
 }
@@ -101,6 +104,7 @@ model Conversation {
   Id_Conversation String    @id @default(uuid())
   name            String?
   Discuss         Discuss[]
+  Message         Message[]
 
   @@map("Conversation")
 }

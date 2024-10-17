@@ -259,6 +259,1402 @@
           }
         }
       }
+    },
+    "/comments": {
+      "get": {
+        "summary": "Get all comments",
+        "operationId": "getAllComments",
+        "tags": ["Comments"],
+        "responses": {
+          "200": {
+            "description": "A list of comments",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Comment"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new comment",
+        "operationId": "createComment",
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "comment",
+            "description": "Comment object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewComment"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Comment created successfully",
+            "schema": {
+              "$ref": "#/definitions/Comment"
+            }
+          }
+        }
+      }
+    },
+    "/comments/{id}": {
+      "get": {
+        "summary": "Get comment by ID",
+        "operationId": "getCommentById",
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment details",
+            "schema": {
+              "$ref": "#/definitions/Comment"
+            }
+          },
+          "404": {
+            "description": "Comment not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update comment by ID",
+        "operationId": "updateComment",
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "comment",
+            "description": "Updated comment object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewComment"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Comment"
+            }
+          },
+          "404": {
+            "description": "Comment not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete comment by ID",
+        "operationId": "deleteComment",
+        "tags": ["Comments"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Comment deleted successfully"
+          },
+          "404": {
+            "description": "Comment not found"
+          }
+        }
+      }
+    },
+    "/messages": {
+      "get": {
+        "summary": "Get all messages",
+        "operationId": "getAllMessages",
+        "tags": ["Messages"],
+        "responses": {
+          "200": {
+            "description": "A list of messages",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Message"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new message",
+        "operationId": "createMessage",
+        "tags": ["Messages"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "message",
+            "description": "Message object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewMessage"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Message created successfully",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          }
+        }
+      }
+    },
+    "/messages/{id}": {
+      "get": {
+        "summary": "Get message by ID",
+        "operationId": "getMessageById",
+        "tags": ["Messages"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message details",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "404": {
+            "description": "Message not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update message by ID",
+        "operationId": "updateMessage",
+        "tags": ["Messages"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "message",
+            "description": "Updated message object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewMessage"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Message"
+            }
+          },
+          "404": {
+            "description": "Message not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete message by ID",
+        "operationId": "deleteMessage",
+        "tags": ["Messages"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Message deleted successfully"
+          },
+          "404": {
+            "description": "Message not found"
+          }
+        }
+      }
+    },
+    "/notifications": {
+      "get": {
+        "summary": "Get all notifications",
+        "operationId": "getAllNotifications",
+        "tags": ["Notifications"],
+        "responses": {
+          "200": {
+            "description": "A list of notifications",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Notification"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new notification",
+        "operationId": "createNotification",
+        "tags": ["Notifications"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "notification",
+            "description": "Notification object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewNotification"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Notification created successfully",
+            "schema": {
+              "$ref": "#/definitions/Notification"
+            }
+          }
+        }
+      }
+    },
+    "/notifications/{id}": {
+      "get": {
+        "summary": "Get notification by ID",
+        "operationId": "getNotificationById",
+        "tags": ["Notifications"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification details",
+            "schema": {
+              "$ref": "#/definitions/Notification"
+            }
+          },
+          "404": {
+            "description": "Notification not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update notification by ID",
+        "operationId": "updateNotification",
+        "tags": ["Notifications"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "notification",
+            "description": "Updated notification object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewNotification"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Notification"
+            }
+          },
+          "404": {
+            "description": "Notification not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete notification by ID",
+        "operationId": "deleteNotification",
+        "tags": ["Notifications"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Notification deleted successfully"
+          },
+          "404": {
+            "description": "Notification not found"
+          }
+        }
+      }
+    },
+    "/settings": {
+      "get": {
+        "summary": "Get all settings",
+        "operationId": "getAllSettings",
+        "tags": ["Settings"],
+        "responses": {
+          "200": {
+            "description": "A list of settings",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Setting"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new setting",
+        "operationId": "createSetting",
+        "tags": ["Settings"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "setting",
+            "description": "Setting object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewSetting"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Setting created successfully",
+            "schema": {
+              "$ref": "#/definitions/Setting"
+            }
+          }
+        }
+      }
+    },
+    "/settings/{id}": {
+      "get": {
+        "summary": "Get setting by ID",
+        "operationId": "getSettingById",
+        "tags": ["Settings"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Setting details",
+            "schema": {
+              "$ref": "#/definitions/Setting"
+            }
+          },
+          "404": {
+            "description": "Setting not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update setting by ID",
+        "operationId": "updateSetting",
+        "tags": ["Settings"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "setting",
+            "description": "Updated setting object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewSetting"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Setting updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Setting"
+            }
+          },
+          "404": {
+            "description": "Setting not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete setting by ID",
+        "operationId": "deleteSetting",
+        "tags": ["Settings"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Setting deleted successfully"
+          },
+          "404": {
+            "description": "Setting not found"
+          }
+        }
+      }
+    },
+    "/conversations": {
+      "get": {
+        "summary": "Get all conversations",
+        "operationId": "getAllConversations",
+        "tags": ["Conversations"],
+        "responses": {
+          "200": {
+            "description": "A list of conversations",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Conversation"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new conversation",
+        "operationId": "createConversation",
+        "tags": ["Conversations"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "conversation",
+            "description": "Conversation object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewConversation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Conversation created successfully",
+            "schema": {
+              "$ref": "#/definitions/Conversation"
+            }
+          }
+        }
+      }
+    },
+    "/conversations/{id}": {
+      "get": {
+        "summary": "Get conversation by ID",
+        "operationId": "getConversationById",
+        "tags": ["Conversations"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation details",
+            "schema": {
+              "$ref": "#/definitions/Conversation"
+            }
+          },
+          "404": {
+            "description": "Conversation not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update conversation by ID",
+        "operationId": "updateConversation",
+        "tags": ["Conversations"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "conversation",
+            "description": "Updated conversation object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewConversation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversation updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Conversation"
+            }
+          },
+          "404": {
+            "description": "Conversation not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete conversation by ID",
+        "operationId": "deleteConversation",
+        "tags": ["Conversations"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Conversation deleted successfully"
+          },
+          "404": {
+            "description": "Conversation not found"
+          }
+        }
+      }
+    },
+    "/api_results": {
+      "get": {
+        "summary": "Get all API results",
+        "operationId": "getAllAPIResults",
+        "tags": ["API_Results"],
+        "responses": {
+          "200": {
+            "description": "A list of API results",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/APIResult"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new API result",
+        "operationId": "createAPIResult",
+        "tags": ["API_Results"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "api_result",
+            "description": "API result object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewAPIResult"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "API result created successfully",
+            "schema": {
+              "$ref": "#/definitions/APIResult"
+            }
+          }
+        }
+      }
+    },
+    "/api_results/{id}": {
+      "get": {
+        "summary": "Get API result by ID",
+        "operationId": "getAPIResultById",
+        "tags": ["API_Results"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API result details",
+            "schema": {
+              "$ref": "#/definitions/APIResult"
+            }
+          },
+          "404": {
+            "description": "API result not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update API result by ID",
+        "operationId": "updateAPIResult",
+        "tags": ["API_Results"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "api_result",
+            "description": "Updated API result object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewAPIResult"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API result updated successfully",
+            "schema": {
+              "$ref": "#/definitions/APIResult"
+            }
+          },
+          "404": {
+            "description": "API result not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete API result by ID",
+        "operationId": "deleteAPIResult",
+        "tags": ["API_Results"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "API result deleted successfully"
+          },
+          "404": {
+            "description": "API result not found"
+          }
+        }
+      }
+    },
+    "/categories": {
+      "get": {
+        "summary": "Get all categories",
+        "operationId": "getAllCategories",
+        "tags": ["Categories"],
+        "responses": {
+          "200": {
+            "description": "A list of categories",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Category"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new category",
+        "operationId": "createCategory",
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "category",
+            "description": "Category object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewCategory"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Category created successfully",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "summary": "Get category by ID",
+        "operationId": "getCategoryById",
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category details",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update category by ID",
+        "operationId": "updateCategory",
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "category",
+            "description": "Updated category object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewCategory"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Category updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Category"
+            }
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete category by ID",
+        "operationId": "deleteCategory",
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Category deleted successfully"
+          },
+          "404": {
+            "description": "Category not found"
+          }
+        }
+      }
+    },
+    "/friends": {
+      "get": {
+        "summary": "Get all friendships",
+        "operationId": "getAllFriends",
+        "tags": ["Friends"],
+        "responses": {
+          "200": {
+            "description": "A list of friendships",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Friend"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new friendship",
+        "operationId": "createFriend",
+        "tags": ["Friends"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "friend",
+            "description": "Friendship object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewFriend"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Friendship created successfully",
+            "schema": {
+              "$ref": "#/definitions/Friend"
+            }
+          }
+        }
+      }
+    },
+    "/friends/{id_user}/{id_friend}": {
+      "get": {
+        "summary": "Get friendship by user and friend IDs",
+        "operationId": "getFriendById",
+        "tags": ["Friends"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_friend",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Friendship details",
+            "schema": {
+              "$ref": "#/definitions/Friend"
+            }
+          },
+          "404": {
+            "description": "Friendship not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update friendship by user and friend IDs",
+        "operationId": "updateFriend",
+        "tags": ["Friends"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_friend",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "friend",
+            "description": "Updated friendship object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewFriend"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Friendship updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Friend"
+            }
+          },
+          "404": {
+            "description": "Friendship not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete friendship by user and friend IDs",
+        "operationId": "deleteFriend",
+        "tags": ["Friends"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_friend",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Friendship deleted successfully"
+          },
+          "404": {
+            "description": "Friendship not found"
+          }
+        }
+      }
+    },
+    "/reports": {
+      "get": {
+        "summary": "Get all reports",
+        "operationId": "getAllReports",
+        "tags": ["Reports"],
+        "responses": {
+          "200": {
+            "description": "A list of reports",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Report"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new report",
+        "operationId": "createReport",
+        "tags": ["Reports"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "report",
+            "description": "Report object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewReport"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Report created successfully",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          }
+        }
+      }
+    },
+    "/reports/{id}": {
+      "get": {
+        "summary": "Get report by ID",
+        "operationId": "getReportById",
+        "tags": ["Reports"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Report details",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          },
+          "404": {
+            "description": "Report not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update report by ID",
+        "operationId": "updateReport",
+        "tags": ["Reports"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "report",
+            "description": "Updated report object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewReport"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Report updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Report"
+            }
+          },
+          "404": {
+            "description": "Report not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete report by ID",
+        "operationId": "deleteReport",
+        "tags": ["Reports"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Report deleted successfully"
+          },
+          "404": {
+            "description": "Report not found"
+          }
+        }
+      }
+    },
+    "/reports_associations": {
+      "get": {
+        "summary": "Get all user-report associations",
+        "operationId": "getAllReportsAssociations",
+        "tags": ["ReportsAssociations"],
+        "responses": {
+          "200": {
+            "description": "A list of user-report associations",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ReportsAssociation"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new user-report association",
+        "operationId": "createReportAssociation",
+        "tags": ["ReportsAssociations"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "reports_association",
+            "description": "User-report association object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewReportsAssociation"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User-report association created successfully",
+            "schema": {
+              "$ref": "#/definitions/ReportsAssociation"
+            }
+          }
+        }
+      }
+    },
+    "/reports_associations/{id_user}/{id_report}": {
+      "get": {
+        "summary": "Get user-report association by User and Report IDs",
+        "operationId": "getReportAssociationById",
+        "tags": ["ReportsAssociations"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_report",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User-report association details",
+            "schema": {
+              "$ref": "#/definitions/ReportsAssociation"
+            }
+          },
+          "404": {
+            "description": "User-report association not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update user-report association by User and Report IDs",
+        "operationId": "updateReportAssociation",
+        "tags": ["ReportsAssociations"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_report",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "reports_association",
+            "description": "Updated user-report association object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewReportsAssociation"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User-report association updated successfully",
+            "schema": {
+              "$ref": "#/definitions/ReportsAssociation"
+            }
+          },
+          "404": {
+            "description": "User-report association not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete user-report association by User and Report IDs",
+        "operationId": "deleteReportAssociation",
+        "tags": ["ReportsAssociations"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_report",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User-report association deleted successfully"
+          },
+          "404": {
+            "description": "User-report association not found"
+          }
+        }
+      }
+    },
+    "/discussions": {
+      "get": {
+        "summary": "Get all discussions (associations between users and conversations)",
+        "operationId": "getAllDiscussions",
+        "tags": ["Discussions"],
+        "responses": {
+          "200": {
+            "description": "A list of discussions",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Discussion"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new discussion (association between a user and a conversation)",
+        "operationId": "createDiscussion",
+        "tags": ["Discussions"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "discussion",
+            "description": "Discussion object to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewDiscussion"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Discussion created successfully",
+            "schema": {
+              "$ref": "#/definitions/Discussion"
+            }
+          }
+        }
+      }
+    },
+    "/discussions/{id_user}/{id_conversation}": {
+      "get": {
+        "summary": "Get discussion by User and Conversation IDs",
+        "operationId": "getDiscussionById",
+        "tags": ["Discussions"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_conversation",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Discussion details",
+            "schema": {
+              "$ref": "#/definitions/Discussion"
+            }
+          },
+          "404": {
+            "description": "Discussion not found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update discussion by User and Conversation IDs",
+        "operationId": "updateDiscussion",
+        "tags": ["Discussions"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_conversation",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "discussion",
+            "description": "Updated discussion object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/NewDiscussion"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Discussion updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Discussion"
+            }
+          },
+          "404": {
+            "description": "Discussion not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete discussion by User and Conversation IDs",
+        "operationId": "deleteDiscussion",
+        "tags": ["Discussions"],
+        "parameters": [
+          {
+            "name": "id_user",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "id_conversation",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Discussion deleted successfully"
+          },
+          "404": {
+            "description": "Discussion not found"
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -346,6 +1742,11 @@
         "image_exists": {
           "type": "boolean"
         },
+        "image_b64": {
+          "type": "string",
+          "description": "Base64 encoded image, returned only if image_exists is true",
+          "example": "data:image/png;base64,iVBORw0KGgoAAAANS..."
+        },
         "date_creation": {
           "type": "string",
           "format": "date-time"
@@ -375,6 +1776,11 @@
         "image_exists": {
           "type": "boolean"
         },
+        "image_b64": {
+          "type": "string",
+          "description": "Base64 encoded image, required only if image_exists is true",
+          "example": "data:image/png;base64,iVBORw0KGgoAAAANS..."
+        },
         "date_creation": {
           "type": "string",
           "format": "date-time"
@@ -387,6 +1793,470 @@
         }
       },
       "required": ["content", "visibility", "toxic_score", "date_creation", "Id_User"]
+    },
+    "Comment": {
+      "type": "object",
+      "properties": {
+        "Id_Comment": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date_upload": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "toxic_score": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "image_exists": {
+          "type": "boolean"
+        },
+        "image_b64": {
+          "type": "string",
+          "description": "Base64 encoded image, returned only if image_exists is true",
+          "example": "data:image/png;base64,iVBORw0KGgoAAAANS..."
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "Id_Reply_to_comment": {
+          "type": "string",
+          "description": "ID of the comment this comment is replying to"
+        },
+        "replies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Comment"
+          },
+          "description": "Replies to this comment"
+        },
+        "Id_Post": {
+          "type": "string"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["content", "date_upload", "toxic_score", "Id_Post", "Id_User"]
+    },
+    "NewComment": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "date_upload": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "toxic_score": {
+          "type": "number",
+          "format": "decimal"
+        },
+        "image_exists": {
+          "type": "boolean"
+        },
+        "image_b64": {
+          "type": "string",
+          "description": "Base64 encoded image, required only if image_exists is true",
+          "example": "data:image/png;base64,iVBORw0KGgoAAAANS..."
+        },
+        "verified": {
+          "type": "boolean"
+        },
+        "Id_Reply_to_comment": {
+          "type": "string",
+          "description": "ID of the comment this comment is replying to (optional)"
+        },
+        "Id_Post": {
+          "type": "string"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["content", "date_upload", "toxic_score", "Id_Post", "Id_User"]
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "Id_Message": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date_upload": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Conversation": {
+          "type": "string",
+          "description": "ID of the conversation this message belongs to"
+        }
+      },
+      "required": ["content", "date_upload", "Id_User"]
+    },
+    "NewMessage": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string"
+        },
+        "date_upload": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Conversation": {
+          "type": "string",
+          "description": "ID of the conversation this message belongs to"
+        }
+      },
+      "required": ["content", "date_upload", "Id_User"]
+    },
+    "Notification": {
+      "type": "object",
+      "properties": {
+        "Id_Notifications": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date_upload": {
+          "type": "string"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["type", "Id_User"]
+    },
+    "NewNotification": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "date_upload": {
+          "type": "string"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["type", "Id_User"]
+    },
+    "Setting": {
+      "type": "object",
+      "properties": {
+        "Id_Settings": {
+          "type": "string"
+        },
+        "data_type": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "confidentiality": {
+          "type": "boolean"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["data_type", "content", "confidentiality", "Id_User"]
+    },
+    "NewSetting": {
+      "type": "object",
+      "properties": {
+        "data_type": {
+          "type": "string"
+        },
+        "content": {
+          "type": "string"
+        },
+        "confidentiality": {
+          "type": "boolean"
+        },
+        "Id_User": {
+          "type": "string"
+        }
+      },
+      "required": ["data_type", "content", "confidentiality", "Id_User"]
+    },
+    "Conversation": {
+      "type": "object",
+      "properties": {
+        "Id_Conversation": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "Discuss": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Discuss"
+          }
+        },
+        "Message": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Message"
+          }
+        }
+      },
+      "required": ["Id_Conversation"]
+    },
+    "NewConversation": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "APIResult": {
+      "type": "object",
+      "properties": {
+        "Id_api_result": {
+          "type": "string"
+        },
+        "Id_Categories": {
+          "type": "integer"
+        },
+        "flagged": {
+          "type": "boolean"
+        },
+        "Id_Message": {
+          "type": "string"
+        },
+        "Id_Post": {
+          "type": "string"
+        },
+        "Id_Comment": {
+          "type": "string"
+        },
+        "message": {
+          "$ref": "#/definitions/Message"
+        },
+        "post": {
+          "$ref": "#/definitions/Post"
+        },
+        "comment": {
+          "$ref": "#/definitions/Comment"
+        },
+        "Categories": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Category"
+          }
+        }
+      },
+      "required": ["Id_Categories", "Id_Message", "Id_Post", "Id_Comment"]
+    },
+    "NewAPIResult": {
+      "type": "object",
+      "properties": {
+        "Id_Categories": {
+          "type": "integer"
+        },
+        "flagged": {
+          "type": "boolean"
+        },
+        "Id_Message": {
+          "type": "string"
+        },
+        "Id_Post": {
+          "type": "string"
+        },
+        "Id_Comment": {
+          "type": "string"
+        }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "Id_Category": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "score": {
+          "type": "string"
+        },
+        "Id_api_result": {
+          "type": "string"
+        },
+        "api_result": {
+          "$ref": "#/definitions/APIResult"
+        }
+      },
+      "required": ["name", "Id_api_result"]
+    },
+    "NewCategory": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "score": {
+          "type": "string"
+        },
+        "Id_api_result": {
+          "type": "string"
+        }
+      }
+    },
+    "Friend": {
+      "type": "object",
+      "properties": {
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Friend": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "friend": {
+          "$ref": "#/definitions/User"
+        }
+      },
+      "required": ["Id_User", "Id_Friend"]
+    },
+    "NewFriend": {
+      "type": "object",
+      "properties": {
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Friend": {
+          "type": "string"
+        }
+      }
+    },
+    "Report": {
+      "type": "object",
+      "properties": {
+        "Id_Report": {
+          "type": "string"
+        },
+        "Id_Reporter": {
+          "type": "string"
+        },
+        "Id_Reported": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "Reports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Reports"
+          }
+        }
+      },
+      "required": ["Id_Reporter", "Id_Reported"]
+    },
+    "NewReport": {
+      "type": "object",
+      "properties": {
+        "Id_Reporter": {
+          "type": "string"
+        },
+        "Id_Reported": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        }
+      }
+    },
+    "ReportsAssociation": {
+      "type": "object",
+      "properties": {
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Report": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "report": {
+          "$ref": "#/definitions/Report"
+        }
+      },
+      "required": ["Id_User", "Id_Report"]
+    },
+    "NewReportsAssociation": {
+      "type": "object",
+      "properties": {
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Report": {
+          "type": "string"
+        }
+      }
+    },
+    "Discussion": {
+      "type": "object",
+      "properties": {
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Conversation": {
+          "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
+        },
+        "conversation": {
+          "$ref": "#/definitions/Conversation"
+        }
+      },
+      "required": ["Id_User", "Id_Conversation"]
+    },
+    "NewDiscussion": {
+      "type": "object",
+      "properties": {
+        "Id_User": {
+          "type": "string"
+        },
+        "Id_Conversation": {
+          "type": "string"
+        }
+      }
     }
   }
 }
